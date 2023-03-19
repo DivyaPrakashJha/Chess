@@ -1,7 +1,7 @@
 # Packages
 import pygame
-import chess
 import time
+import pyaudio
 import speech_recognition as sr
 # *******************************************************************************
 
@@ -20,10 +20,6 @@ gameFolder = "D:/SE/PBL2/"
 # Game Window and Title
 surface = pygame.display.set_mode( (width, height) );
 pygame.display.set_caption('Voice-Chess')
-
-backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
-backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
-surface.blit(backgroundImage, (0, 0))
 # *******************************************************************************
 
 # Display of Board Configuration
@@ -79,6 +75,7 @@ def displayBlackPieces():
 # Game
 
 play = True
+assetsLoaded = False
 clock = pygame.time.Clock();
 FPS = 10
 turn = 0 # 0 -> White's Turn, 1 -> Black's Turn
@@ -87,6 +84,12 @@ finalPos = ()
 timer = 0;
 
 while(play):
+    if not assetsLoaded:
+        backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
+        backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
+        surface.blit(backgroundImage, (0, 0))
+        assetsLoaded = True
+
     displayBoard()
     displayWhitePieces()
     displayBlackPieces()
@@ -94,7 +97,7 @@ while(play):
     for evnt in pygame.event.get():
         if (evnt.type == pygame.QUIT):
             play = False
-        if (evnt.type == pygame.MOUSEBUTTONDOWN):
+        if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
             location = pygame.mouse.get_pos();
 
             x = (location[0] - 2*side)//side
@@ -110,6 +113,10 @@ while(play):
                     implementMove(initPos, finalPos);
                     initPos = ()
                     finalPos = ()
+        if evnt.type == pygame.KEYDOWN:
+            if evnt.type == pygame.K_SPACE:
+                print("Voice Detection")
+
 
     pygame.display.update()
     clock.tick(FPS)
