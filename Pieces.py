@@ -8,9 +8,9 @@ class King:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhiteKing.png"
+            return "GameImages/ChessPieces/WhiteKing.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackKing.png"
+            return "GameImages/ChessPieces/BlackKing.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos
@@ -27,9 +27,9 @@ class Queen:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhiteQueen.png"
+            return "GameImages/ChessPieces/WhiteQueen.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackQueen.png"
+            return "GameImages/ChessPieces/BlackQueen.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
@@ -45,9 +45,9 @@ class Rook:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhiteRook.png"
+            return "GameImages/ChessPieces/WhiteRook.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackRook.png"
+            return "GameImages/ChessPieces/BlackRook.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
@@ -63,9 +63,9 @@ class Bishop:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhiteBishop.png"
+            return "GameImages/ChessPieces/WhiteBishop.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackBishop.png"
+            return "GameImages/ChessPieces/BlackBishop.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
@@ -82,9 +82,9 @@ class Knight:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhiteKnight.png"
+            return "GameImages/ChessPieces/WhiteKnight.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackKnight.png"
+            return "GameImages/ChessPieces/BlackKnight.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
@@ -101,9 +101,9 @@ class Pawn:
 
     def getLogo(self):
         if (self.color == 'W'):
-            return "ChessPieces/WhitePawn.png"
+            return "GameImages/ChessPieces/WhitePawn.png"
         elif (self.color == 'B'):
-            return "ChessPieces/BlackPawn.png"
+            return "GameImages/ChessPieces/BlackPawn.png"
 
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
