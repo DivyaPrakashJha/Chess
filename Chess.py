@@ -9,6 +9,7 @@ import speech_recognition as sr
 from ChessBoard import *
 from Pieces import *
 from ChessEngine import *
+from VoiceRecognition import *
 # *******************************************************************************
 pygame.init();
 
@@ -20,7 +21,7 @@ gameFolder = "D:/SE/PBL2/"
 surface = pygame.display.set_mode( (width, height) );
 pygame.display.set_caption('Voice-Chess')
 
-backgroundImage = pygame.image.load(gameFolder + "Images/gameBackground.png");
+backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
 backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
 surface.blit(backgroundImage, (0, 0))
 # *******************************************************************************
