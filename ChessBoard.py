@@ -1,7 +1,7 @@
 from Pieces import *
 
 # Square size
-side = 100
+side = 80
 
 # Colors
 black = (110, 110, 110); # to depict black

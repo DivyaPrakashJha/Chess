@@ -12,3 +12,10 @@ def implementMove(initPos, finalPos):
         elif pieceAtFinalPos.color != pieceAtInitPos.color: # Capture
             pieceAtFinalPos.updateCurrPos(pieceAtFinalPos.ripPos)
             ( BoardState[initPos[0]][initPos[1]] , BoardState[finalPos[0]][finalPos[1]] ) = (null, BoardState[initPos[0]][initPos[1]] )
+
+def generatePossibleMoves():
+    moves = []
+    moves.append( (4, 5) )
+    moves.append( (4, 6) )
+
+    return moves
