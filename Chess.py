@@ -2,8 +2,6 @@
 import pygame
 import math
 import time
-import pyaudio
-import speech_recognition as sr
 # *******************************************************************************
 
 # Modules
@@ -20,14 +18,14 @@ gameFolder = "D:/SE/PBL2/"
 
 # Game Window and Title
 surface = pygame.display.set_mode( (width, height) );
-pygame.display.set_caption('Voice-Chess')
+pygame.display.set_caption('Game of Wits')
 # *******************************************************************************
 
 # Display of Board Configuration
 
 def getPosOnScreen(pos): # from x, y coordinates
     xpos = 2*side + pos[0] * side
-    ypos = pos[1] * side
+    ypos = side + pos[1] * side
 
     return (xpos, ypos)
 
@@ -40,7 +38,7 @@ def printWhiteSquare(x, y):
 # Function for displaying the board
 def displayBoard():
     x = -side
-    y = -side
+    y = 0
     for i in range(1, 9):
         y += side
         x = -side
@@ -75,7 +73,7 @@ def displaySrcSquare(src):
 
 # Function for displaying the possible moves
 def displayPossibleMoves(src):
-    moves = generatePossibleMoves();
+    moves = generatePossibleMoves(src);
 
     for x in moves:
         posMove = pygame.image.load(gameFolder + "GameImages/greenCircleSmall.png")
@@ -116,7 +114,7 @@ while(play):
         backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
         surface.blit(backgroundImage, (0, 0))
         pygame.mixer.music.load(gameFolder + "GameSounds/instrumental.mp3")
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.4)
         pygame.mixer.music.play()
 
         assetsLoaded = True
@@ -132,7 +130,7 @@ while(play):
             location = pygame.mouse.get_pos();
 
             x = (location[0] - 2*side)//side
-            y = (location[1])//side;
+            y = (location[1] - side)//side;
 
             if not (len(initPos) == 0 and BoardState[y][x] == null):
                 if len(initPos) == 0:
@@ -145,7 +143,8 @@ while(play):
                     initPos = ()
                 else:
                     finalPos = (y, x)
-                    implementMove(initPos, finalPos);
+                    print(initPos, finalPos)
+                    implementMove(initPos, finalPos)
                     src.play()
                     initPos = ()
                     finalPos = ()
