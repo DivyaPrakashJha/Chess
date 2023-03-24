@@ -8,7 +8,7 @@ black = (110, 110, 110); # to depict black
 white = (255, 255, 255);
 
 # Board Size
-height = side*8
+height = side*10
 width = side*12
 
 # Board State
