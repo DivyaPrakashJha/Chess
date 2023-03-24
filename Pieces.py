@@ -1,7 +1,7 @@
 # **** Classes ****
 
 class King:
-    def __init__(self, color, currPos,  ripPos, points = 99):
+    def __init__(self, color, currPos,  ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -15,12 +15,11 @@ class King:
     def updateCurrPos(self, newPos):
         self.currPos = newPos
 
-    def isValidMove(finalPos):
-        return True
-
+    def getPieceValue(self):
+        return 99
 
 class Queen:
-    def __init__(self, color, currPos, ripPos, points = 9):
+    def __init__(self, color, currPos, ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -34,11 +33,11 @@ class Queen:
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
 
-    def isValidMove(finalPos):
-        return True
+    def getPieceValue(self):
+        return 9
 
 class Rook:
-    def __init__(self, color, currPos, ripPos, points = 5):
+    def __init__(self, color, currPos, ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -52,11 +51,12 @@ class Rook:
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
 
-    def isValidMove(finalPos):
-        return True
+    def getPieceValue(self):
+        return 5
+
 
 class Bishop:
-    def __init__(self, color, currPos, ripPos, points = 3):
+    def __init__(self, color, currPos, ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -70,12 +70,15 @@ class Bishop:
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
 
+    def getPieceValue(self):
+        return 3.2
+
     def isValidMove(finalPos):
         return True
 
 
 class Knight:
-    def __init__(self, color, currPos, ripPos, points = 3):
+    def __init__(self, color, currPos, ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -87,14 +90,13 @@ class Knight:
             return "GameImages/ChessPieces/BlackKnight.png"
 
     def updateCurrPos(self, newPos):
-        self.currPos = newPos;
+        self.currPos = newPos
 
-    def isValidMove(finalPos):
-        return True
-
+    def getPieceValue(self):
+        return 3
 
 class Pawn:
-    def __init__(self, color, currPos, ripPos, points = 1):
+    def __init__(self, color, currPos, ripPos):
         self.color = color
         self.currPos = currPos
         self.ripPos = ripPos
@@ -108,14 +110,13 @@ class Pawn:
     def updateCurrPos(self, newPos):
         self.currPos = newPos;
 
-    def isValidMove(finalPos):
-        return True
+    def getPieceValue(self):
+        return 1
+
 
 class Null: # for empty cell
     def __init__(self, points = 0):
         self.points = 0
-    def getLogo(self):
-        return "ChessPieces/WhitePawn.png"
 
 # ***** Pieces as Objects *****
 
