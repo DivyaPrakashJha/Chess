@@ -1,6 +1,5 @@
 from ChessBoard import BoardState
 from Pieces import *
-
 from Rules import *
 
 def implementMove(initPos, finalPos):

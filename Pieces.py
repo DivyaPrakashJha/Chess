@@ -18,6 +18,7 @@ class King:
     def getPieceValue(self):
         return 99
 
+# *******************************************************************************
 class Queen:
     def __init__(self, color, currPos, ripPos):
         self.color = color
@@ -36,6 +37,7 @@ class Queen:
     def getPieceValue(self):
         return 9
 
+# *******************************************************************************
 class Rook:
     def __init__(self, color, currPos, ripPos):
         self.color = color
@@ -54,7 +56,7 @@ class Rook:
     def getPieceValue(self):
         return 5
 
-
+# *******************************************************************************
 class Bishop:
     def __init__(self, color, currPos, ripPos):
         self.color = color
@@ -76,7 +78,7 @@ class Bishop:
     def isValidMove(finalPos):
         return True
 
-
+# *******************************************************************************
 class Knight:
     def __init__(self, color, currPos, ripPos):
         self.color = color
@@ -95,6 +97,7 @@ class Knight:
     def getPieceValue(self):
         return 3
 
+# *******************************************************************************
 class Pawn:
     def __init__(self, color, currPos, ripPos):
         self.color = color
@@ -113,12 +116,14 @@ class Pawn:
     def getPieceValue(self):
         return 1
 
-
+# *******************************************************************************
 class Null: # for empty cell
     def __init__(self, points = 0):
         self.points = 0
 
-# ***** Pieces as Objects *****
+# *******************************************************************************
+
+# Pieces as Objects
 
 whitePieces = []
 

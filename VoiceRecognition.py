@@ -1,24 +1,24 @@
-import speech_recognition as sr
-import time
+import pyaudio
+from vosk import Model, KaldiRecognizer # For offline speech recogntion
 
-# def speechToText():
-    # recognizer = sr.Recognizer()
-    #
-    # try:
-    #     with sr.Microphone() as mic:
-    #         print("Speak..")
-    #         recognizer.adjust_for_ambient_noise(mic, duration = 0.1)
-    #         audio = recognizer.listen(mic)
-    #         print("Recognizing..")
-    #         text = recognizer.recognize_ibm(audio)
-    #
-    #         return text
-    # except:
-    #     return "zz"
+# Language Model
+model = Model("D:/SE/PBL2/LanguageModel/VoskModelSmallIndianEnglish")
+recognizer = KaldiRecognizer(model, 16000)
 
+def SpeechToText():
+    mic = pyaudio.PyAudio()
+    stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
+    stream.start_stream()
 
-def getPosByVoice(turn, gameState):
-    if (gameState == 0):
-        return (1, 5)
-    else:
-        return (2, 5)
+    while True:
+        data = stream.read(4096)
+
+        if recognizer.AcceptWaveform(data):
+            text = recognizer.Result()
+            print(text)
+            break;
+
+    return text.lower()
+def getPosition(text):
+    if (text == "be one" or "b1"):
+        return (())

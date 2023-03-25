@@ -4,28 +4,29 @@ from ChessBoard import *
 def isUnderCheck():
     return False
 def isValid(initPos, finalPos, isUnderCheck):
-    if (finalPos[0] > 7 or finalPos[0] < 0 or finalPos[1] > 7 or finalPos[1] < 0):
-        return False;
-
     pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
     pieceAtFinalPos = BoardState[finalPos[0]][finalPos[1]]
+    # *******************************************************************************
 
+    if (finalPos[0] > 7 or finalPos[0] < 0 or finalPos[1] > 7 or finalPos[1] < 0):
+        return False;
     if pieceAtFinalPos != null and pieceAtInitPos.color == pieceAtFinalPos.color:
         return False
+    # *******************************************************************************
 
     if pieceAtInitPos.getPieceValue() == 99:  # King
         if (abs(finalPos[0] - initPos[0]) > 1 or abs(finalPos[1] - initPos[1]) > 1):
             return False;
         else:
             return True
-
+    # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 9:  # Queen
         if ( (initPos[0] != finalPos[0] and initPos[1] != finalPos[1]) and (abs(initPos[0]-finalPos[0]) != abs(initPos[1]-finalPos[1])) ):
             return False
 
         return True
-
+    # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 5:  # Rook
         if (initPos[0] != finalPos[0] and initPos[1] != finalPos[1]):
@@ -54,6 +55,13 @@ def isValid(initPos, finalPos, isUnderCheck):
 
 
         return True
+    # *******************************************************************************
+
+    elif pieceAtInitPos.getPieceValue() == 3.2:  # Bishop
+        if ( abs(initPos[0] - finalPos[0]) != abs(initPos[1] - finalPos[1] )):
+            return False
+        return True
+    # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 3:  # Knight
         pos1 = (initPos[0]+2, initPos[1]+1)
@@ -75,13 +83,7 @@ def isValid(initPos, finalPos, isUnderCheck):
                     return True
 
         return False
-
-
-    elif pieceAtInitPos.getPieceValue() == 3.2:  # Bishop
-        if ( abs(initPos[0] - finalPos[0]) != abs(initPos[1] - finalPos[1] )):
-            return False
-        return True
-
+    # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 1:  # Pawn
         if (pieceAtInitPos.color == 'W'):
@@ -104,5 +106,5 @@ def isValid(initPos, finalPos, isUnderCheck):
             elif (initPos[0] != 6 and finalPos[0] < initPos[0] - 1):
                 return False
             return True
-
+    # *******************************************************************************
 

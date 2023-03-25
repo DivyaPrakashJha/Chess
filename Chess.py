@@ -4,25 +4,25 @@ import math
 import time
 # *******************************************************************************
 
+# Game Location
+gameFolder = "D:/SE/PBL2/"
+# *******************************************************************************
+
 # Modules
 from ChessBoard import *
 from Pieces import *
 from ChessEngine import *
 from VoiceRecognition import *
 # *******************************************************************************
-pygame.init();
 
-# Game Location
-gameFolder = "D:/SE/PBL2/"
-# *******************************************************************************
+pygame.init();
 
 # Game Window and Title
 surface = pygame.display.set_mode( (width, height) );
-pygame.display.set_caption('Game of Wits')
+pygame.display.set_caption('The  Game of Wits')
 # *******************************************************************************
 
 # Display of Board Configuration
-
 def getPosOnScreen(pos): # from x, y coordinates
     xpos = 2*side + pos[0] * side
     ypos = side + pos[1] * side
@@ -152,15 +152,16 @@ while(play):
             if evnt.key == pygame.K_ESCAPE:
                 play = False
             if evnt.key == pygame.K_SPACE:
-                if (gameState == 0):
-                    initPos = getPosByVoice(turn, gameState)
-                    gameState+=1
-                elif (gameState == 1):
-                    finalPos = getPosByVoice(turn, gameState)
-                    implementMove(initPos, finalPos);
-                    initPos = ()
-                    finalPos = ()
-                    gameState-=1
+                SpeechToText()
+                # if (gameState == 0):
+                #     initPos = getPosByVoice(turn, gameState)
+                #     gameState+=1
+                # elif (gameState == 1):
+                #     finalPos = getPosByVoice(turn, gameState)
+                #     implementMove(initPos, finalPos);
+                #     initPos = ()
+                #     finalPos = ()
+                #     gameState-=1
 
 
     pygame.display.update()
