@@ -75,10 +75,10 @@ def displaySrcSquare(src):
 def displayPossibleMoves(src):
     moves = generatePossibleMoves(src);
 
-    for x in moves:
+    for cord in moves:
         posMove = pygame.image.load(gameFolder + "GameImages/greenCircleSmall.png")
         posMove = pygame.transform.scale(posMove, (side, side))
-        surface.blit(posMove, getPosOnScreen(x))
+        surface.blit(posMove, getPosOnScreen(cord))
 # *******************************************************************************
 
 # Game Sounds
@@ -91,10 +91,23 @@ src = pygame.mixer.Sound(gameFolder + 'GameSounds/selectpiece.wav')
 src.set_volume(0.8)
 dest = pygame.mixer.Sound(gameFolder + 'GameSounds/destination.wav')
 dest.set_volume(0.8)
-
-
 # ******************************************************************************
 
+# Inputs
+def takeMouseInput():
+    location = pygame.mouse.get_pos()
+
+    x = (location[0] - 2 * side) // side
+    y = (location[1] - side) // side
+
+    return (y, x)
+
+def takeVoiceInput():
+    text = SpeechToText()
+
+    return getPosition(text)
+
+# ******************************************************************************
 
 # Game
 
@@ -102,11 +115,12 @@ play = True
 assetsLoaded = False
 clock = pygame.time.Clock();
 FPS = 20
+initPos = []
+finalPos = []
 
 turn = 0 # 0 -> White's Turn, 1 -> Black's Turn
 gameState = 0 # 0 -> Select Initial Position, 1 -> Select Final Position for Piece
-initPos = () # For a move
-finalPos = ()
+
 
 while(play):
     if not assetsLoaded:
@@ -127,41 +141,31 @@ while(play):
         if (evnt.type == pygame.QUIT):
             play = False
         if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
-            location = pygame.mouse.get_pos();
+            if (gameState == 0):
+                initPos = takeMouseInput()
 
-            x = (location[0] - 2*side)//side
-            y = (location[1] - side)//side;
-
-            if not (len(initPos) == 0 and BoardState[y][x] == null):
-                if len(initPos) == 0:
-                    initPos = (y, x)
-                    displaySrcSquare( (x, y) )
-                    displayPossibleMoves( initPos )
+                if isValidSrc(initPos, turn):
+                    displaySrcSquare( (initPos[1], initPos[0]) )
+                    displayPossibleMoves(initPos)
+                    gameState = 1
 
                     dest.play()
-                elif (y == initPos[0] and x == initPos[1]):
-                    initPos = ()
+
+            elif (gameState == 1):
+                finalPos = takeMouseInput()
+                if finalPos == initPos:
+                    gameState = 0
                 else:
-                    finalPos = (y, x)
-                    print(initPos, finalPos)
                     implementMove(initPos, finalPos)
                     src.play()
-                    initPos = ()
-                    finalPos = ()
+                    gameState = 0
+                    turn = 1-turn
+
         if (evnt.type == pygame.KEYDOWN):
             if evnt.key == pygame.K_ESCAPE:
                 play = False
             if evnt.key == pygame.K_SPACE:
-                SpeechToText()
-                # if (gameState == 0):
-                #     initPos = getPosByVoice(turn, gameState)
-                #     gameState+=1
-                # elif (gameState == 1):
-                #     finalPos = getPosByVoice(turn, gameState)
-                #     implementMove(initPos, finalPos);
-                #     initPos = ()
-                #     finalPos = ()
-                #     gameState-=1
+                takeVoiceInput()
 
 
     pygame.display.update()
