@@ -3,7 +3,7 @@ from Pieces import *
 from Rules import *
 
 def implementMove(initPos, finalPos):
-    if isValid(initPos, finalPos, False):
+    if isValidMove(initPos, finalPos, False):
         pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
         pieceAtFinalPos = BoardState[finalPos[0]][finalPos[1]]
 
@@ -19,6 +19,6 @@ def generatePossibleMoves(initPos):
 
     for i in range(0, 8) :
         for j in range(0, 8):
-            if isValid(initPos, (i, j), isUnderCheck()):
+            if isValidMove(initPos, (i, j), isUnderCheck()):
                 moves.append((j, i))
     return moves

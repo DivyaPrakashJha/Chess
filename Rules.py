@@ -1,9 +1,23 @@
 from Pieces import *
 from ChessBoard import *
 
+def isValidSrc(src, turn):
+    if (src[0] > 7 or src[1] > 7 or src[0] < 0 or src[1] < 0):
+        return False
+    elif BoardState[src[0]][src[1]] == null:
+        return False
+    elif turn == 0 and BoardState[src[0]][src[1]].color == 'B':
+        return False
+    elif turn == 1 and BoardState[src[0]][src[1]].color == 'W':
+        return False
+
+    return True
+
 def isUnderCheck():
     return False
-def isValid(initPos, finalPos, isUnderCheck):
+
+
+def isValidMove(initPos, finalPos, isUnderCheck):
     pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
     pieceAtFinalPos = BoardState[finalPos[0]][finalPos[1]]
     # *******************************************************************************

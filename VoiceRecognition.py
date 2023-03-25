@@ -19,6 +19,6 @@ def SpeechToText():
             break;
 
     return text.lower()
-def getPosition(text):
+def getPosition():
     if (text == "be one" or "b1"):
         return (())
