@@ -29,14 +29,14 @@ def getPosition():
     y = 0
 
     r = [
-        ["a", "yeah", "ate","eh","they","hey","a."], # a
-        ["b", "bee","b."], # b
-        ["c", "see","c."], # c
-        ["d", "the","d.","day"], # d
-        ["e","e."], # e
-        ["f","f."], # f
-        ["g", "je", "jee","g."], # g
-        ["h","edge","eight","it","h.","it's"]  # h
+        ["a", "yeah", "ate","eh","they","hey", "eight"], # a
+        ["b", "bee"], # b
+        ["c", "see"], # c
+        ["d", "the", "day"], # d
+        ["e"], # e
+        ["f"], # f
+        ["g", "je", "jee"], # g
+        ["h","edge", "it","it's"]  # h
     ]
 
     c = [
@@ -68,6 +68,9 @@ def getPosition():
         if (flag):
             break
         y+=1
+
+    if x == 8:
+        x = ord(row[0]) - ord('a') + 1
 
 
     print(x)

@@ -143,7 +143,7 @@ while(play):
 
     if gameState == 1:
         displaySrcSquare((initPos[1], initPos[0]))
-        displayPossibleMoves(initPos)
+        # displayPossibleMoves(initPos)
 
 
     for evnt in pygame.event.get():
