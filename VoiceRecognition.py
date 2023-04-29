@@ -1,5 +1,6 @@
 import pyaudio
 from vosk import Model, KaldiRecognizer # For offline speech recogntion
+import time
 
 # Language Model
 model = Model("D:/SE/PBL2/LanguageModel/VoskModelSmallIndianEnglish")
@@ -10,6 +11,9 @@ def SpeechToText():
     stream = mic.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8192)
     stream.start_stream()
 
+    duration = 3
+    startTime = time.time()
+
     while True:
         data = stream.read(4096)
 
@@ -17,12 +21,20 @@ def SpeechToText():
             text = recognizer.Result()
             break
 
+        if time.time() - startTime > duration:
+            return ""
+            break
+
     return text[14:-3].lower()
 
 def getPosition():
-    row = SpeechToText()
+    row = ""
+    while not len(row):
+        row = SpeechToText()
     print(row)
-    col = SpeechToText()
+    col = ""
+    while not len(col):
+        col = SpeechToText()
     print(col)
 
     x = 0
