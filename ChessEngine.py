@@ -77,20 +77,23 @@ def isValidMove(initPos, finalPos, isUnderCheck):
         if ( abs(initPos[0] - finalPos[0]) != abs(initPos[1] - finalPos[1] )):
             return False
         else:
-            increment1 = -1
-            increment2 = -1
-
             if (initPos[0] < finalPos[0]):
                 increment1 = 1
+            else:
+                increment1 = -1
 
             if (initPos[1] < finalPos[1]):
-                incement2 = 1
+                increment2 = 1
+            else:
+                increment2 = -1
 
             i = initPos[0]+increment1
             j = initPos[1]+increment2
-            for i in range(initPos[0] , finalPos[0], increment1):
+
+            while i != finalPos[0]:
                 if (BoardState[i][j] != null):
                     return False
+                i += increment1
                 j += increment2
 
         return True
@@ -168,10 +171,7 @@ def generatePossibleMoves(initPos):
 
     for i in range(0, 8) :
         for j in range(0, 8):
-            print(i, j, end = " ")
             if isValidMove(initPos, (i, j), isUnderCheck()):
                 moves.append((j, i))
-                print(1)
-            else:
-                print(0)
+
     return moves
