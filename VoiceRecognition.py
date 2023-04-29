@@ -15,10 +15,23 @@ def SpeechToText():
 
         if recognizer.AcceptWaveform(data):
             text = recognizer.Result()
-            print(text)
-            break;
+            break
 
-    return text.lower()
+    print("1" + text)
+    while True:
+        data = stream.read(4096)
+
+        if recognizer.AcceptWaveform(data):
+            text1 = recognizer.Result()
+            break
+    print("2" + text1)
+    return (text[14:-3].lower(), text1[14:-3].lower())
+
 def getPosition():
-    if (text == "be one" or "b1"):
-        return (())
+    (row, col) = SpeechToText()
+    # col = text[1]
+    # row = text[0]
+
+    print(row)
+    print(col)
+    return (1, 0)
