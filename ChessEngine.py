@@ -33,13 +33,35 @@ def isValidMove(initPos, finalPos, isUnderCheck):
     if pieceAtInitPos.getPieceValue() == 99:  # King
         if (abs(finalPos[0] - initPos[0]) > 1 or abs(finalPos[1] - initPos[1]) > 1):
             return False;
-        else:
-            return True
+        
+        return True
     # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 9:  # Queen
         if ( (initPos[0] != finalPos[0] and initPos[1] != finalPos[1]) and (abs(initPos[0]-finalPos[0]) != abs(initPos[1]-finalPos[1])) ):
             return False
+        else:
+            xincrement = 0
+            yincrement = 0
+
+            if (initPos[0] < finalPos[0]):
+                xincrement = 1
+            elif (initPos[0] > finalPos[0]):
+                xincrement = -1
+
+            if (initPos[1] < finalPos[1]):
+                yincrement = 1
+            elif (initPos[1] > finalPos[1]):
+                yincrement = -1
+
+            i = initPos[0] + xincrement
+            j = initPos[1] + yincrement
+
+            while (i != finalPos[0] or j != finalPos[1]):
+                if (BoardState[i][j] != null):
+                    return False
+                i += xincrement
+                j += yincrement
 
         return True
     # *******************************************************************************
@@ -48,27 +70,27 @@ def isValidMove(initPos, finalPos, isUnderCheck):
         if (initPos[0] != finalPos[0] and initPos[1] != finalPos[1]):
             return False
         else:
-            increment = 1
-            if (initPos[0] == finalPos[0]):
-                if (initPos[1] > finalPos[1]):
-                    increment = -1
-                else:
-                    increment = 1
+            xincrement = 0
+            yincrement = 0
 
-                for i in range(initPos[1]+increment, finalPos[1], increment):
-                    if (BoardState[finalPos[0]][i] != null):
-                        return False
+            if (initPos[0] < finalPos[0]):
+                xincrement = 1
+            elif (initPos[0] > finalPos[0]):
+                xincrement = -1
 
-            elif (initPos[1] == finalPos[1]):
-                if (initPos[0] > finalPos[0]):
-                    increment = -1
-                else:
-                    increment = 1
+            if (initPos[1] < finalPos[1]):
+                yincrement = 1
+            elif (initPos[1] > finalPos[1]):
+                yincrement = -1
 
-                for i in range(initPos[0]+increment, finalPos[0], increment):
-                    if (BoardState[i][finalPos[1]] != null):
-                        return False
+            i = initPos[0] + xincrement
+            j = initPos[1] + yincrement
 
+            while (i != finalPos[0] or j != finalPos[1]):
+                if (BoardState[i][j] != null):
+                    return False
+                i += xincrement
+                j += yincrement
 
         return True
     # *******************************************************************************
@@ -78,23 +100,23 @@ def isValidMove(initPos, finalPos, isUnderCheck):
             return False
         else:
             if (initPos[0] < finalPos[0]):
-                increment1 = 1
+                xincrement = 1
             else:
-                increment1 = -1
+                xincrement = -1
 
             if (initPos[1] < finalPos[1]):
-                increment2 = 1
+                yincrement = 1
             else:
-                increment2 = -1
+                yincrement = -1
 
-            i = initPos[0]+increment1
-            j = initPos[1]+increment2
+            i = initPos[0] + xincrement
+            j = initPos[1] + yincrement
 
             while i != finalPos[0]:
                 if (BoardState[i][j] != null):
                     return False
-                i += increment1
-                j += increment2
+                i += xincrement
+                j += yincrement
 
         return True
     # *******************************************************************************
@@ -173,5 +195,4 @@ def generatePossibleMoves(initPos):
         for j in range(0, 8):
             if isValidMove(initPos, (i, j), isUnderCheck()):
                 moves.append((j, i))
-
     return moves
