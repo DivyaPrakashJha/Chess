@@ -103,9 +103,7 @@ def takeMouseInput():
     return (y, x)
 
 def takeVoiceInput():
-    text = SpeechToText()
-
-    return getPosition(text)
+    return getPosition()
 
 # ******************************************************************************
 
@@ -127,22 +125,33 @@ while(play):
         backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
         backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
         surface.blit(backgroundImage, (0, 0))
-        pygame.mixer.music.load(gameFolder + "GameSounds/instrumental.mp3")
-        pygame.mixer.music.set_volume(0.4)
-        pygame.mixer.music.play()
+        # pygame.mixer.music.load(gameFolder + "GameSounds/instrumental.mp3")
+        # pygame.mixer.music.set_volume(0.4)
+        # pygame.mixer.music.play()
 
         assetsLoaded = True
+        wTurn.play()
 
     displayBoard()
     displayWhitePieces()
     displayBlackPieces()
 
+    if gameState == 1:
+        displaySrcSquare((initPos[1], initPos[0]))
+        displayPossibleMoves(initPos)
+
+
     for evnt in pygame.event.get():
         if (evnt.type == pygame.QUIT):
             play = False
-        if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
-            if (gameState == 0):
+        if (evnt.type == pygame.KEYDOWN):
+            if evnt.key == pygame.K_ESCAPE:
+                play = False
+
+        if (gameState == 0):
+            if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
                 initPos = takeMouseInput()
+                print(initPos)
 
                 if isValidSrc(initPos, turn):
                     displaySrcSquare( (initPos[1], initPos[0]) )
@@ -151,22 +160,56 @@ while(play):
 
                     dest.play()
 
-            elif (gameState == 1):
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_SPACE:
+                    initPos = takeVoiceInput()
+
+                    if isValidSrc(initPos, turn):
+                        displaySrcSquare((initPos[1], initPos[0]))
+                        displayPossibleMoves(initPos)
+                        gameState = 1
+
+                        dest.play()
+
+        elif (gameState == 1):
+            if (evnt.type == pygame.MOUSEBUTTONDOWN):
                 finalPos = takeMouseInput()
                 if finalPos == initPos:
                     gameState = 0
                 else:
-                    implementMove(initPos, finalPos)
-                    src.play()
-                    gameState = 0
-                    turn = 1-turn
+                    if implementMove(initPos, finalPos) == True:
+                        gameState = 0
+                        turn = 1-turn
 
-        if (evnt.type == pygame.KEYDOWN):
-            if evnt.key == pygame.K_ESCAPE:
-                play = False
-            if evnt.key == pygame.K_SPACE:
-                takeVoiceInput()
 
+                        displayBoard()
+                        displayWhitePieces()
+                        displayBlackPieces()
+                        pygame.display.update()
+                        clock.tick(FPS)
+
+                        pygame.time.wait(1100)
+                        if (turn == 0):
+                            wTurn.play()
+                        else:
+                            bTurn.play()
+
+
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_SPACE:
+                    finalPos = takeVoiceInput()
+                    if finalPos == initPos:
+                        gameState = 0
+                    else:
+                        if implementMove(initPos, finalPos) == True:
+                            gameState = 0
+                            turn = 1 - turn
+                            if (turn == 0):
+                                wTurn.play()
+                            else:
+                                bTurn.play()
+                            # pygame.time.wait(1100)
+                            # src.play()
 
     pygame.display.update()
     clock.tick(FPS)
