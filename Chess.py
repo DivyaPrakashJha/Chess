@@ -103,8 +103,13 @@ def takeMouseInput():
     return (y, x)
 
 def takeVoiceInput():
-    return getPosition()
+    (x, y) = getPosition()
 
+    # conf = SpeechToText();
+    # if (conf == "yes" or conf == "as"):
+    #     return (y, x)
+
+    return (y, x)
 # ******************************************************************************
 
 # Game

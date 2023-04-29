@@ -76,6 +76,28 @@ def isValidMove(initPos, finalPos, isUnderCheck):
     elif pieceAtInitPos.getPieceValue() == 3.2:  # Bishop
         if ( abs(initPos[0] - finalPos[0]) != abs(initPos[1] - finalPos[1] )):
             return False
+        else:
+            increment1 = 0
+            increment2 = 0
+
+            if (initPos[0] < finalPos[0]):
+                increment1 = 1
+            else:
+                increment1 = -1
+
+            if (initPos[1] < finalPos[1]):
+                incement2 = 1
+            else:
+                increment2 = -1
+
+            i = initPos[0]
+            j = initPos[1]
+            while(i != finalPos[0]):
+                if (BoardState[i][j] != null):
+                    return False
+                i += increment1
+                j += increment2
+
         return True
     # *******************************************************************************
 
