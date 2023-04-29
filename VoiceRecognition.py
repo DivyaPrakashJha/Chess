@@ -29,25 +29,25 @@ def getPosition():
     y = 0
 
     r = [
-        ["a", "yeah", "eight", "ate"], # a
-        ["b", "bee"], # b
-        ["c", "see"], # c
-        ["d", "the"], # d
-        ["e"], # e
-        ["f"], # f
-        ["g", "je", "jee"], # g
-        ["h"]  # h
+        ["a", "yeah", "ate","eh","they","hey","a."], # a
+        ["b", "bee","b."], # b
+        ["c", "see","c."], # c
+        ["d", "the","d.","day"], # d
+        ["e","e."], # e
+        ["f","f."], # f
+        ["g", "je", "jee","g."], # g
+        ["h","edge","eight","it","h.","it's"]  # h
     ]
 
     c = [
         ["one", "won", "van", "worn", "when", "wane"],  # 1
         ["two", "do", "too", "to"],  # 2
         ["three", "the", "threw", "tree", "free", "tea", "we"],  # 3
-        ["four", "door", "ford"],  # 4
-        ["five"],  # 5
-        ["six"],  # 6
+        ["four", "door", "ford","source"],  # 4
+        ["five","why","while"],  # 5
+        ["six","sec"],  # 6
         ["seven", "even"],  # 7
-        ["eight", "ate"]  # 8
+        ["eight", "ate","it"]  # 8
     ]
 
     flag = 0
