@@ -143,7 +143,7 @@ while(play):
 
     if gameState == 1:
         displaySrcSquare((initPos[1], initPos[0]))
-        # displayPossibleMoves(initPos)
+        displayPossibleMoves(initPos)
 
 
     for evnt in pygame.event.get():
@@ -186,19 +186,20 @@ while(play):
                         gameState = 0
                         turn = 1-turn
 
-
                         displayBoard()
                         displayWhitePieces()
                         displayBlackPieces()
                         pygame.display.update()
                         clock.tick(FPS)
-
                         pygame.time.wait(1100)
+
                         if (turn == 0):
                             wTurn.play()
                         else:
                             bTurn.play()
 
+                        pygame.time.wait(1100)
+                        src.play()
 
             if (evnt.type == pygame.KEYDOWN):
                 if evnt.key == pygame.K_SPACE:
@@ -213,8 +214,10 @@ while(play):
                                 wTurn.play()
                             else:
                                 bTurn.play()
-                            # pygame.time.wait(1100)
-                            # src.play()
+
+                            pygame.time.wait(1100)
+                            src.play()
+
 
     pygame.display.update()
     clock.tick(FPS)
