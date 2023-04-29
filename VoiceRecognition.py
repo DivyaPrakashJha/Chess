@@ -48,31 +48,37 @@ def getPosition():
     ]
 
     c = [
-        ["one"],  # 1
+        ["one", "won", "van", "worn", "when", "wane"],  # 1
         ["two", "do", "too", "to"],  # 2
-        ["three"],  # 3
-        ["four", "door"],  # 4
+        ["three", "the", "threw", "tree", "free", "tea", "we"],  # 3
+        ["four", "door", "ford"],  # 4
         ["five"],  # 5
         ["six"],  # 6
         ["seven", "even"],  # 7
-        ["eight, "ate""]   # 8
+        ["eight", "ate"]  # 8
     ]
 
-
+    flag = 0
     for li in r:
         for element in li:
             if (element == row):
-                break
+                flag = 1
+
+        if (flag):
+            break;
         x+=1
 
+    flag = 0
     for li in c:
         for element in li:
             if (element == col):
-                break
+                flag = 1
+        if (flag):
+            break
         y+=1
 
-    
+
     print(x)
     print(y)
 
-    return (x, y)
+    return (y, x)
