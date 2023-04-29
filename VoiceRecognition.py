@@ -29,9 +29,50 @@ def SpeechToText():
 
 def getPosition():
     (row, col) = SpeechToText()
-    # col = text[1]
-    # row = text[0]
 
     print(row)
     print(col)
-    return (1, 0)
+
+    x = 0
+    y = 0
+
+    r = [
+        ["a", "yeah", "eight", "ate"], # a
+        ["b", "bee"], # b
+        ["c", "see"], # c
+        ["d", "the"], # d
+        ["e"], # e
+        ["f"], # f
+        ["g", "je", "jee"], # g
+        ["h"]  # h
+    ]
+
+    c = [
+        ["one"],  # 1
+        ["two", "do", "too", "to"],  # 2
+        ["three"],  # 3
+        ["four", "door"],  # 4
+        ["five"],  # 5
+        ["six"],  # 6
+        ["seven", "even"],  # 7
+        ["eight, "ate""]   # 8
+    ]
+
+
+    for li in r:
+        for element in li:
+            if (element == row):
+                break
+        x+=1
+
+    for li in c:
+        for element in li:
+            if (element == col):
+                break
+        y+=1
+
+    
+    print(x)
+    print(y)
+
+    return (x, y)
