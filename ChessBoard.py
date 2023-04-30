@@ -12,13 +12,14 @@ height = side*10
 width = side*12
 
 # Board State
+
 BoardState = [
-    [rookW1, knightW1, bishopWw, queenW, kingW, bishopWb, knightW2, rookW2],
-    [pawnW1, pawnW2, pawnW3, pawnW4, pawnW5, pawnW6, pawnW7, pawnW8],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
+    [rookB1, knightB1, bishopBw, queenB, kingB, bishopBb, knightB2, rookB2],
     [pawnB1, pawnB2, pawnB3, pawnB4, pawnB5, pawnB6, pawnB7, pawnB8],
-    [rookB1, knightB1, bishopBb, queenB, kingB, bishopBw, knightB2, rookB2]
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [pawnW1, pawnW2, pawnW3, pawnW4, pawnW5, pawnW6, pawnW7, pawnW8],
+    [rookW1, knightW1, bishopWb, queenW, kingW, bishopWw, knightW2, rookW2]
 ]
