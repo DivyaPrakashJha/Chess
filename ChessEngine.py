@@ -33,7 +33,7 @@ def isValidMove(initPos, finalPos, isUnderCheck):
     if pieceAtInitPos.getPieceValue() == 99:  # King
         if (abs(finalPos[0] - initPos[0]) > 1 or abs(finalPos[1] - initPos[1]) > 1):
             return False;
-        
+
         return True
     # *******************************************************************************
 
@@ -144,29 +144,43 @@ def isValidMove(initPos, finalPos, isUnderCheck):
     # *******************************************************************************
 
     elif pieceAtInitPos.getPieceValue() == 1:  # Pawn
-        if (pieceAtInitPos.color == 'W'):
+        if (pieceAtInitPos.color == 'B'): # Take
             if (finalPos[0] == initPos[0]+1 and (finalPos[1] == initPos[1]+1 or finalPos[1] == initPos[1]-1) ):
                 if (BoardState[finalPos[0]][finalPos[1]] != null):
                     return True
+            if (finalPos[0] == initPos[0]+1 and BoardState[finalPos[0]][finalPos[1]] != null):
+                return False
             if (initPos[1] != finalPos[1]):
                 return False
             if (finalPos[0] < initPos[0]):
                 return False
-            if (initPos[0] == 1 and finalPos[0] > 3):
-                return False
+            if (initPos[0] == 1):
+                if finalPos[0] > 3:
+                    return False
+                if (BoardState[2][finalPos[1]] != null):
+                    return False
+                if (finalPos[0] == 3 and BoardState[3][finalPos[1]] != null):
+                    return False
             elif (initPos[0] != 1 and finalPos[0] > initPos[0] + 1):
                 return False
             return True
-        elif (pieceAtInitPos.color == 'B'):
+        elif (pieceAtInitPos.color == 'W'):
             if (finalPos[0] == initPos[0]-1 and (finalPos[1] == initPos[1]+1 or finalPos[1] == initPos[1]-1) ):
                 if (BoardState[finalPos[0]][finalPos[1]] != null):
                     return True
+            if (finalPos[0] == initPos[0]-1 and BoardState[finalPos[0]][finalPos[1]] != null):
+                return False
             if (initPos[1] != finalPos[1]):
                 return False;
             if (finalPos[0] > initPos[0]):
                 return False
-            if (initPos[0] == 6 and finalPos[0] < 4):
-                return False
+            if (initPos[0] == 6):
+                if finalPos[0] < 4:
+                    return False
+                if (BoardState[5][finalPos[1]] != null):
+                    return False
+                if (finalPos[0] == 4 and BoardState[4][finalPos[1]] != null):
+                    return False
             elif (initPos[0] != 6 and finalPos[0] < initPos[0] - 1):
                 return False
             return True
