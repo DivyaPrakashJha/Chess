@@ -25,7 +25,7 @@ pygame.display.set_caption('The  Game of Wits')
 # Display of Board Configuration
 def getPosOnScreen(pos): # from x, y coordinates
     xpos = 2*side + pos[0] * side
-    ypos = side + pos[1] * side
+    ypos = pos[1] * side
 
     return (xpos, ypos)
 
@@ -38,7 +38,7 @@ def printWhiteSquare(x, y):
 # Function for displaying the board
 def displayBoard():
     x = -side
-    y = 0
+    y = -side
     for i in range(1, 9):
         y += side
         x = -side
@@ -93,12 +93,23 @@ dest = pygame.mixer.Sound(gameFolder + 'GameSounds/destination.wav')
 dest.set_volume(0.8)
 # ******************************************************************************
 
+# Game Font
+
+bigGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 140)
+medGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 100)
+smallGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 40)
+GREEN = pygame.Color(0,200,0)
+RED = pygame.Color(255,0,0)
+WHITE = pygame.Color(255,255,255)
+
+# ******************************************************************************
+
 # Inputs
 def takeMouseInput():
     location = pygame.mouse.get_pos()
 
     x = (location[0] - 2 * side) // side
-    y = (location[1] - side) // side
+    y = (location[1]) // side
 
     return (y, x)
 
@@ -114,102 +125,107 @@ def takeVoiceInput():
 
 # Game
 
-play = True
-assetsLoaded = False
 clock = pygame.time.Clock();
 FPS = 20
-initPos = []
-finalPos = []
+def start():
+    select = False
+    coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
+    coverImage = pygame.transform.scale(coverImage, (width, height))
 
-turn = 0 # 0 -> White's Turn, 1 -> Black's Turn
-gameState = 0 # 0 -> Select Initial Position, 1 -> Select Final Position for Piece
+    surface.blit(coverImage, (0, 0))
+    title = bigGameFont.render("The Game of Wits", True, WHITE)
+    titlerect = title.get_rect()
+    titlerect.centerx = width//2
+    titlerect.centery = height//3
+
+    surface.blit(title, titlerect)
+
+    while not select:
+
+        for evnt in pygame.event.get():
+            if (evnt.type == pygame.QUIT):
+                select = True
+
+        pygame.display.update()
+        clock.tick(FPS)
+
+        if select:
+            pygame.mixer.music.stop()
+
+def game():
+    play = True
+    assetsLoaded = False
+    initPos = []
+    finalPos = []
+
+    turn = 0  # 0 -> White's Turn, 1 -> Black's Turn
+    gameState = 0  # 0 -> Select Initial Position, 1 -> Select Final Position for Piece
+
+    while(play):
+        if not assetsLoaded:
+            backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
+            backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
+            surface.blit(backgroundImage, (0, 0))
+
+            assetsLoaded = True
+            wTurn.play()
+
+        displayBoard()
+        displayWhitePieces()
+        displayBlackPieces()
+
+        if gameState == 1:
+            displaySrcSquare((initPos[1], initPos[0]))
+            displayPossibleMoves(initPos)
 
 
-while(play):
-    if not assetsLoaded:
-        backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
-        backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
-        surface.blit(backgroundImage, (0, 0))
-        # pygame.mixer.music.load(gameFolder + "GameSounds/instrumental.mp3")
-        # pygame.mixer.music.set_volume(0.4)
-        # pygame.mixer.music.play()
-
-        assetsLoaded = True
-        wTurn.play()
-
-    displayBoard()
-    displayWhitePieces()
-    displayBlackPieces()
-
-    if gameState == 1:
-        displaySrcSquare((initPos[1], initPos[0]))
-        displayPossibleMoves(initPos)
-
-
-    for evnt in pygame.event.get():
-        if (evnt.type == pygame.QUIT):
-            play = False
-        if (evnt.type == pygame.KEYDOWN):
-            if evnt.key == pygame.K_ESCAPE:
+        for evnt in pygame.event.get():
+            if (evnt.type == pygame.QUIT):
                 play = False
-
-        if (gameState == 0):
-            if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
-                initPos = takeMouseInput()
-                print(initPos)
-
-                if isValidSrc(initPos, turn):
-                    displaySrcSquare( (initPos[1], initPos[0]) )
-                    displayPossibleMoves(initPos)
-                    gameState = 1
-
-                    dest.play()
-
             if (evnt.type == pygame.KEYDOWN):
-                if evnt.key == pygame.K_SPACE:
-                    initPos = takeVoiceInput()
+                if evnt.key == pygame.K_ESCAPE:
+                    play = False
+
+            if (gameState == 0):
+                if (evnt.type == pygame.MOUSEBUTTONDOWN): # For moving pieces through mouse
+                    initPos = takeMouseInput()
+                    print(initPos)
 
                     if isValidSrc(initPos, turn):
-                        displaySrcSquare((initPos[1], initPos[0]))
+                        displaySrcSquare( (initPos[1], initPos[0]) )
                         displayPossibleMoves(initPos)
                         gameState = 1
 
                         dest.play()
 
-        elif (gameState == 1):
-            if (evnt.type == pygame.MOUSEBUTTONDOWN):
-                finalPos = takeMouseInput()
-                if finalPos == initPos:
-                    gameState = 0
-                else:
-                    if implementMove(initPos, finalPos) == True:
-                        gameState = 0
-                        turn = 1-turn
+                if (evnt.type == pygame.KEYDOWN):
+                    if evnt.key == pygame.K_SPACE:
+                        initPos = takeVoiceInput()
 
-                        displayBoard()
-                        displayWhitePieces()
-                        displayBlackPieces()
-                        pygame.display.update()
-                        clock.tick(FPS)
-                        pygame.time.wait(1100)
+                        if isValidSrc(initPos, turn):
+                            displaySrcSquare((initPos[1], initPos[0]))
+                            displayPossibleMoves(initPos)
+                            gameState = 1
 
-                        if (turn == 0):
-                            wTurn.play()
-                        else:
-                            bTurn.play()
+                            dest.play()
 
-                        pygame.time.wait(1100)
-                        src.play()
-
-            if (evnt.type == pygame.KEYDOWN):
-                if evnt.key == pygame.K_SPACE:
-                    finalPos = takeVoiceInput()
+            elif (gameState == 1):
+                if (evnt.type == pygame.MOUSEBUTTONDOWN):
+                    finalPos = takeMouseInput()
                     if finalPos == initPos:
                         gameState = 0
                     else:
                         if implementMove(initPos, finalPos) == True:
                             gameState = 0
-                            turn = 1 - turn
+                            turn = 1-turn
+
+                            displayBoard()
+                            displayWhitePieces()
+                            displayBlackPieces()
+                            pygame.display.update()
+                            clock.tick(FPS)
+                            pygame.time.wait(1100)
+
                             if (turn == 0):
                                 wTurn.play()
                             else:
@@ -218,10 +234,39 @@ while(play):
                             pygame.time.wait(1100)
                             src.play()
 
+                if (evnt.type == pygame.KEYDOWN):
+                    if evnt.key == pygame.K_SPACE:
+                        finalPos = takeVoiceInput()
+                        if finalPos == initPos:
+                            gameState = 0
+                        else:
+                            if implementMove(initPos, finalPos) == True:
+                                gameState = 0
+                                turn = 1 - turn
+                                if (turn == 0):
+                                    wTurn.play()
+                                else:
+                                    bTurn.play()
 
-    pygame.display.update()
-    clock.tick(FPS)
+                                pygame.time.wait(1100)
+                                src.play()
 
 
+        pygame.display.update()
+        clock.tick(FPS)
+
+
+def main():
+    pygame.mixer.music.load(gameFolder + "GameSounds/instrumental.mp3")
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play()
+    start()
+    # choosePlayer()
+    # chooseBoardStyle()
+    pygame.mixer.music.stop()
+    game()
+    # endScreen()
+
+main()
 pygame.quit();
 
