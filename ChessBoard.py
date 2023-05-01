@@ -1,14 +1,14 @@
 from Pieces import *
 
 # Square size
-side = 80
+side = 90
 
 # Colors
 black = (110, 110, 110); # to depict black
 white = (255, 255, 255);
 
 # Board Size
-height = side*10
+height = side*8
 width = side*12
 
 # Board State
