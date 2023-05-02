@@ -82,7 +82,7 @@ def getPosition():
         y+=1
 
     if x == 8:
-        x = ord(row[0]) - ord('a') + 1
+        x = ord(row[0]) - ord('a')
 
 
     print(x)
