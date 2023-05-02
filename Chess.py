@@ -18,7 +18,7 @@ from VoiceRecognition import *
 pygame.init();
 
 # Game Window and Title
-surface = pygame.display.set_mode( (width, height) );
+surface = pygame.display.set_mode( (board.width, board.height) );
 pygame.display.set_caption('The  Game of Wits')
 # *******************************************************************************
 
@@ -31,9 +31,9 @@ def getPosOnScreen(pos): # from x, y coordinates
 
 # Function for displaying a cell
 def printBlackSquare(x, y):
-    pygame.draw.rect(surface, black, pygame.Rect(x, y, side, side));
+    pygame.draw.rect(surface, board.color[0], pygame.Rect(x, y, side, side));
 def printWhiteSquare(x, y):
-    pygame.draw.rect(surface, white, pygame.Rect(x, y, side, side));
+    pygame.draw.rect(surface, board.color[1], pygame.Rect(x, y, side, side));
 
 # Function for displaying the board
 def displayBoard():
@@ -139,23 +139,23 @@ boardStyle = 1
 def start():
     select = False
     coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
-    coverImage = pygame.transform.scale(coverImage, (width, height))
+    coverImage = pygame.transform.scale(coverImage, (board.width, board.height))
 
     surface.blit(coverImage, (0, 0))
     title = bigGameFont.render("The Game of Wits", True, YELLOW)
     titleRect = title.get_rect()
-    titleRect.centerx = width//2
-    titleRect.centery = height//3
+    titleRect.centerx = board.width / 2
+    titleRect.centery = board.height / 3
 
     playGame = medGameFont.render("Play", True, GREEN);
     playRect = playGame.get_rect()
-    playRect.centerx = width // 4
-    playRect.centery = height // 1.6
+    playRect.centerx = board.width / 4
+    playRect.centery = board.height / 1.6
 
     quitGame = medGameFont.render("Quit", True, RED);
     quitRect = playGame.get_rect()
-    quitRect.centerx = width // 1.33
-    quitRect.centery = height // 1.6
+    quitRect.centerx = board.width / 1.33
+    quitRect.centery = board.height / 1.6
 
     surface.blit(title, titleRect)
     surface.blit(playGame, playRect)
@@ -198,7 +198,7 @@ def start():
 def chooseMode():
     select = False
     coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
-    coverImage = pygame.transform.scale(coverImage, (width, height))
+    coverImage = pygame.transform.scale(coverImage, (board.width, board.height))
 
     surface.blit(coverImage, (0, 0))
 
@@ -209,18 +209,18 @@ def chooseMode():
 
     chPlayer = bigGameFont.render("Choose Mode", True, GREEN)
     chPlayerRect = chPlayer.get_rect()
-    chPlayerRect.centerx = width // 2
-    chPlayerRect.centery = height // 4
+    chPlayerRect.centerx = board.width / 2
+    chPlayerRect.centery = board.height / 4
 
     onePlayer = medGameFont.render("1 Player", True, WHITE)
     onePlayerRect = onePlayer.get_rect()
-    onePlayerRect.centerx = width // 2
-    onePlayerRect.centery = height // 2
+    onePlayerRect.centerx = board.width / 2
+    onePlayerRect.centery = board.height / 2
 
     twoPlayers = medGameFont.render("2 Players", True, WHITE)
     twoPlayersRect = twoPlayers.get_rect()
-    twoPlayersRect.centerx = width // 2
-    twoPlayersRect.centery = height // 1.3
+    twoPlayersRect.centerx = board.width / 2
+    twoPlayersRect.centery = board.height / 1.3
 
     surface.blit(back, backRect)
     surface.blit(chPlayer, chPlayerRect)
@@ -261,26 +261,65 @@ def chooseMode():
     if choice == 3:
         start()
     elif choice != 0:
+        if choice == 1:
+            board.color = grey
+        elif choice == 2:
+            board.color = green
+        elif choice == 3:
+            board.color = brown
+        elif choice == 4:
+            board.color = blue
+
         gameMode = choice
         chooseBoardStyle()
 # ******************************************************************************
+
+# Select Board Style
 def chooseBoardStyle():
     select = False
     coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
-    coverImage = pygame.transform.scale(coverImage, (width, height))
+    coverImage = pygame.transform.scale(coverImage, (board.width, board.height))
 
     surface.blit(coverImage, (0, 0))
+
+    greyBoard = pygame.image.load(gameFolder + "GameImages/ChessBoardSamples/grey.png")
+    greyBoard = pygame.transform.scale(greyBoard, (board.width/3.42, board.height/2.28))
+    greyBoardRect = greyBoard.get_rect()
+    greyBoardRect.centerx = board.width/4 + board.width/32
+    greyBoardRect.centery = board.height/4
+
+    greenBoard = pygame.image.load(gameFolder + "GameImages/ChessBoardSamples/green.png")
+    greenBoard = pygame.transform.scale(greenBoard, (board.width / 3.42, board.height / 2.28))
+    greenBoardRect = greenBoard.get_rect()
+    greenBoardRect.centerx = 3*board.width / 4 - board.width/32
+    greenBoardRect.centery = board.height / 4
+
+    brownBoard = pygame.image.load(gameFolder + "GameImages/ChessBoardSamples/brown.png")
+    brownBoard = pygame.transform.scale(brownBoard, (board.width / 3.42, board.height / 2.28))
+    brownBoardRect = brownBoard.get_rect()
+    brownBoardRect.centerx = board.width / 4 + board.width/32
+    brownBoardRect.centery = 3*board.height / 4
+
+    blueBoard = pygame.image.load(gameFolder + "GameImages/ChessBoardSamples/blue.png")
+    blueBoard = pygame.transform.scale(blueBoard, (board.width / 3.42, board.height / 2.28))
+    blueBoardRect = blueBoard.get_rect()
+    blueBoardRect.centerx = 3*board.width / 4 - board.width/32
+    blueBoardRect.centery = 3*board.height / 4
 
     back = smallGameFont.render("-BACK-", True, RED)
     backRect = back.get_rect()
     backRect.x = 0
     backRect.y = 0
 
-    chBoard = bigGameFont.render("Select Board", True, GREEN)
+    chBoard = medGameFont.render("Select Board", True, YELLOW)
     chBoardRect = chBoard.get_rect()
-    chBoardRect.centerx = width // 2
-    chBoardRect.centery = height // 2
+    chBoardRect.centerx = board.width / 2
+    chBoardRect.centery = board.height / 2
 
+    surface.blit(greyBoard, greyBoardRect)
+    surface.blit(greenBoard, greenBoardRect)
+    surface.blit(brownBoard, brownBoardRect)
+    surface.blit(blueBoard, blueBoardRect)
     surface.blit(back, backRect)
     surface.blit(chBoard, chBoardRect)
 
@@ -289,9 +328,24 @@ def chooseBoardStyle():
     while not select:
         x, y = pygame.mouse.get_pos()
 
-        if (x >= backRect[0] and x <= backRect[0] + backRect.width) and (y >= backRect[1] and y <= backRect[1] + backRect.height):
+        if (x >= greyBoardRect[0] and x <= greyBoardRect[0] + greyBoardRect.width) and (y >= greyBoardRect[1] and y <= greyBoardRect[1] + greyBoardRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 1
+        elif (x >= greenBoardRect[0] and x <= greenBoardRect[0] + greenBoardRect.width) and (y >= greenBoardRect[1] and y <= greenBoardRect[1] + greenBoardRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 2
+        elif (x >= brownBoardRect[0] and x <= brownBoardRect[0] + brownBoardRect.width) and (y >= brownBoardRect[1] and y <= brownBoardRect[1] + brownBoardRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 3
+        elif (x >= blueBoardRect[0] and x <= blueBoardRect[0] + blueBoardRect.width) and (y >= blueBoardRect[1] and y <= blueBoardRect[1] + blueBoardRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 4
+        elif (x >= backRect[0] and x <= backRect[0] + backRect.width) and (y >= backRect[1] and y <= backRect[1] + backRect.height):
             pygame.mouse.set_cursor(pygame.cursors.diamond)
             choice = 5
+        else:
+            pygame.mouse.set_cursor(pygame.cursors.ball)
+            choice = 0
 
         for evnt in pygame.event.get():
             if (evnt.type == pygame.QUIT):
@@ -308,21 +362,32 @@ def chooseBoardStyle():
 
     if choice == 5:
         chooseMode()
-    else:
+    elif choice:
+        if choice == 1:
+            board.color = grey
+        elif choice == 2:
+            board.color = green
+        elif choice == 3:
+            board.color = brown
+        elif choice == 4:
+            board.color = blue
+
         pygame.mixer.music.stop()
         game()
 # ******************************************************************************
+
+
 def endScreen(winner):
     select = False
     coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
-    coverImage = pygame.transform.scale(coverImage, (width, height))
+    coverImage = pygame.transform.scale(coverImage, (board.width, board.height))
 
     surface.blit(coverImage, (0, 0))
 
-    win = bigGameFont.render(winner + " Wins!!", True, WHITE)
+    win = bigGameFont.render(winner + " Wins!!", True, YELLOW)
     winRect = win.get_rect()
-    winRect.centerx = width // 2
-    winRect.centery = height // 2
+    winRect.centerx = board.width / 2
+    winRect.centery = board.height / 2
 
     surface.blit(win, winRect)
 
@@ -336,6 +401,8 @@ def endScreen(winner):
 
         pygame.display.update()
         clock.tick(FPS)
+# ******************************************************************************
+
 
 def game():
     play = True
@@ -349,7 +416,7 @@ def game():
     while(play):
         if not assetsLoaded:
             backgroundImage = pygame.image.load(gameFolder + "GameImages/gameBackground.png");
-            backgroundImage = pygame.transform.scale(backgroundImage, (width, height))
+            backgroundImage = pygame.transform.scale(backgroundImage, (board.width, board.height))
             surface.blit(backgroundImage, (0, 0))
 
             assetsLoaded = True
@@ -448,6 +515,7 @@ def main():
     start()
     # endScreen("White")
 
-main()
-pygame.quit();
 
+main()
+
+pygame.quit();
