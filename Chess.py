@@ -95,12 +95,15 @@ dest.set_volume(0.8)
 
 # Game Font
 
-bigGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 140)
-medGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 100)
-smallGameFont = pygame.font.Font(gameFolder + 'GameFonts/SunnyspellsRegular.otf', 40)
+bigGameFont = pygame.font.Font(gameFolder + 'GameFonts/SkaterDudes.ttf', 100)
+medGameFont = pygame.font.Font(gameFolder + 'GameFonts/SkaterDudes.ttf', 70)
+smallGameFont = pygame.font.Font(gameFolder + 'GameFonts/SkaterDudes.ttf', 40)
+
 GREEN = pygame.Color(0,200,0)
 RED = pygame.Color(255,0,0)
 WHITE = pygame.Color(255,255,255)
+BLACK = pygame.Color(0, 0, 0)
+YELLOW = pygame.Color(255, 255, 0)
 
 # ******************************************************************************
 
@@ -127,30 +130,212 @@ def takeVoiceInput():
 
 clock = pygame.time.Clock();
 FPS = 20
+gameMode = 2  # 1 -> Single Player (vs engine) 2 -> Two Players
+boardStyle = 1
+
+# ******************************************************************************
+
+# StartScreen
 def start():
     select = False
     coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
     coverImage = pygame.transform.scale(coverImage, (width, height))
 
     surface.blit(coverImage, (0, 0))
-    title = bigGameFont.render("The Game of Wits", True, WHITE)
-    titlerect = title.get_rect()
-    titlerect.centerx = width//2
-    titlerect.centery = height//3
+    title = bigGameFont.render("The Game of Wits", True, YELLOW)
+    titleRect = title.get_rect()
+    titleRect.centerx = width//2
+    titleRect.centery = height//3
 
-    surface.blit(title, titlerect)
+    playGame = medGameFont.render("Play", True, GREEN);
+    playRect = playGame.get_rect()
+    playRect.centerx = width // 4
+    playRect.centery = height // 1.6
+
+    quitGame = medGameFont.render("Quit", True, RED);
+    quitRect = playGame.get_rect()
+    quitRect.centerx = width // 1.33
+    quitRect.centery = height // 1.6
+
+    surface.blit(title, titleRect)
+    surface.blit(playGame, playRect)
+    surface.blit(quitGame, quitRect);
+
+    choice = 0
 
     while not select:
+        x, y = pygame.mouse.get_pos()
+
+        if (x >= playRect[0] and x <= playRect[0] + playRect.width) and (y >= playRect[1] and y <= playRect[1] + playRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 1
+        elif (x >= quitRect[0] and x <= quitRect[0]+quitRect.width) and (y >= quitRect[1] and y <= quitRect[1]+quitRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 2
+        else:
+            pygame.mouse.set_cursor(pygame.cursors.ball)
+            choice = 0
 
         for evnt in pygame.event.get():
             if (evnt.type == pygame.QUIT):
                 select = True
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_ESCAPE:
+                    select = True
+
+            if (evnt.type == pygame.MOUSEBUTTONDOWN):
+                if choice:
+                    select = True
 
         pygame.display.update()
         clock.tick(FPS)
 
-        if select:
-            pygame.mixer.music.stop()
+    if (choice == 1):
+        chooseMode()
+# ******************************************************************************
+
+# Select Mode Screen
+def chooseMode():
+    select = False
+    coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
+    coverImage = pygame.transform.scale(coverImage, (width, height))
+
+    surface.blit(coverImage, (0, 0))
+
+    back = smallGameFont.render("-BACK-", True, RED)
+    backRect = back.get_rect()
+    backRect.x = 0
+    backRect.y = 0
+
+    chPlayer = bigGameFont.render("Choose Mode", True, GREEN)
+    chPlayerRect = chPlayer.get_rect()
+    chPlayerRect.centerx = width // 2
+    chPlayerRect.centery = height // 4
+
+    onePlayer = medGameFont.render("1 Player", True, WHITE)
+    onePlayerRect = onePlayer.get_rect()
+    onePlayerRect.centerx = width // 2
+    onePlayerRect.centery = height // 2
+
+    twoPlayers = medGameFont.render("2 Players", True, WHITE)
+    twoPlayersRect = twoPlayers.get_rect()
+    twoPlayersRect.centerx = width // 2
+    twoPlayersRect.centery = height // 1.3
+
+    surface.blit(back, backRect)
+    surface.blit(chPlayer, chPlayerRect)
+    surface.blit(onePlayer, onePlayerRect)
+    surface.blit(twoPlayers, twoPlayersRect)
+
+    choice = 0
+
+    while not select:
+        x, y = pygame.mouse.get_pos()
+
+        if (x >=  onePlayerRect[0] and x <= onePlayerRect[0] + onePlayerRect.width) and (y >= onePlayerRect[1] and y <= onePlayerRect[1] + onePlayerRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 1
+        elif (x >= twoPlayersRect[0] and x <= twoPlayersRect[0] + twoPlayersRect.width) and (y >= twoPlayersRect[1] and y <= twoPlayersRect[1] + twoPlayersRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 2
+        elif (x >= backRect[0] and x <= backRect[0] + backRect.width) and (y >= backRect[1] and y <= backRect[1] + backRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 3
+        else:
+            pygame.mouse.set_cursor(pygame.cursors.ball)
+            choice = 0
+
+        for evnt in pygame.event.get():
+            if (evnt.type == pygame.QUIT):
+                select = True
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_ESCAPE:
+                    select = True
+
+            if (evnt.type == pygame.MOUSEBUTTONDOWN):
+                if choice:
+                    select = True
+        pygame.display.update()
+        clock.tick(FPS)
+
+    if choice == 3:
+        start()
+    elif choice != 0:
+        gameMode = choice
+        chooseBoardStyle()
+# ******************************************************************************
+def chooseBoardStyle():
+    select = False
+    coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
+    coverImage = pygame.transform.scale(coverImage, (width, height))
+
+    surface.blit(coverImage, (0, 0))
+
+    back = smallGameFont.render("-BACK-", True, RED)
+    backRect = back.get_rect()
+    backRect.x = 0
+    backRect.y = 0
+
+    chBoard = bigGameFont.render("Select Board", True, GREEN)
+    chBoardRect = chBoard.get_rect()
+    chBoardRect.centerx = width // 2
+    chBoardRect.centery = height // 2
+
+    surface.blit(back, backRect)
+    surface.blit(chBoard, chBoardRect)
+
+    choice = 0
+
+    while not select:
+        x, y = pygame.mouse.get_pos()
+
+        if (x >= backRect[0] and x <= backRect[0] + backRect.width) and (y >= backRect[1] and y <= backRect[1] + backRect.height):
+            pygame.mouse.set_cursor(pygame.cursors.diamond)
+            choice = 5
+
+        for evnt in pygame.event.get():
+            if (evnt.type == pygame.QUIT):
+                select = True
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_ESCAPE:
+                    select = True
+
+            if (evnt.type == pygame.MOUSEBUTTONDOWN):
+                if choice:
+                    select = True
+        pygame.display.update()
+        clock.tick(FPS)
+
+    if choice == 5:
+        chooseMode()
+    else:
+        pygame.mixer.music.stop()
+        game()
+# ******************************************************************************
+def endScreen(winner):
+    select = False
+    coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
+    coverImage = pygame.transform.scale(coverImage, (width, height))
+
+    surface.blit(coverImage, (0, 0))
+
+    win = bigGameFont.render(winner + " Wins!!", True, WHITE)
+    winRect = win.get_rect()
+    winRect.centerx = width // 2
+    winRect.centery = height // 2
+
+    surface.blit(win, winRect)
+
+    while not select:
+        for evnt in pygame.event.get():
+            if (evnt.type == pygame.QUIT):
+                select = True
+            if (evnt.type == pygame.KEYDOWN):
+                if evnt.key == pygame.K_ESCAPE:
+                    play = False
+
+        pygame.display.update()
+        clock.tick(FPS)
 
 def game():
     play = True
@@ -261,11 +446,7 @@ def main():
     pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play()
     start()
-    # choosePlayer()
-    # chooseBoardStyle()
-    pygame.mixer.music.stop()
-    game()
-    # endScreen()
+    # endScreen("White")
 
 main()
 pygame.quit();
