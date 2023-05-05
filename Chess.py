@@ -260,16 +260,7 @@ def chooseMode():
 
     if choice == 3:
         start()
-    elif choice != 0:
-        if choice == 1:
-            board.color = grey
-        elif choice == 2:
-            board.color = green
-        elif choice == 3:
-            board.color = brown
-        elif choice == 4:
-            board.color = blue
-
+    else:
         gameMode = choice
         chooseBoardStyle()
 # ******************************************************************************
