@@ -38,7 +38,7 @@ def getPosition():
     print(col)
 
     x = 0
-    y = 0
+    y = 7
 
     r = [
         ["a", "yeah", "ate","eh","they","hey", "eight"], # a
@@ -79,11 +79,11 @@ def getPosition():
                 flag = 1
         if (flag):
             break
-        y+=1
+        y-=1
 
     if x == 8:
         x = ord(row[0]) - ord('a')
-
+    y = max(y, 0)
 
     print(x)
     print(y)

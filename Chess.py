@@ -24,8 +24,8 @@ pygame.display.set_caption('The  Game of Wits')
 
 # Display of Board Configuration
 def getPosOnScreen(pos): # from x, y coordinates
-    xpos = 2*side + pos[0] * side
-    ypos = pos[1] * side
+    xpos = 2.25*side + pos[0] * side
+    ypos = 0.25*side + pos[1] * side
 
     return (xpos, ypos)
 
@@ -38,10 +38,10 @@ def printWhiteSquare(x, y):
 # Function for displaying the board
 def displayBoard():
     x = -side
-    y = -side
+    y = -side + 0.25*side
     for i in range(1, 9):
         y += side
-        x = -side
+        x = -side + 0.25*side
         for j in range(1, 13):
             x += side
             if (j <= 2 or j >= 11):
@@ -111,10 +111,10 @@ YELLOW = pygame.Color(255, 255, 0)
 def takeMouseInput():
     location = pygame.mouse.get_pos()
 
-    x = (location[0] - 2 * side) // side
-    y = (location[1]) // side
+    x = (location[0] - 2.25 * side) // side
+    y = (location[1] - 0.25 * side) // side
 
-    return (y, x)
+    return (int(y), int(x))
 
 def takeVoiceInput():
     (x, y) = getPosition()

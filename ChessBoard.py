@@ -16,7 +16,7 @@ class Board:
         self.width = width
 
 
-board = Board(side, grey, side*8, side*12)
+board = Board(side, grey, side*8.5, side*12.5)
 
 
 # Board State
