@@ -58,6 +58,11 @@ def displayWhitePieces():
         Image = pygame.transform.scale(Image, (side, side))
         surface.blit(Image, getPosOnScreen(pi.currPos))
 
+    for pi in deadWhitePieces: # displaying white pieces
+        Image = pygame.image.load(gameFolder + pi.getLogo())
+        Image = pygame.transform.scale(Image, (side, side))
+        surface.blit(Image, getPosOnScreen(pi.currPos))
+
 # Function for displaying the black pieces
 def displayBlackPieces():
     for pi in blackPieces: # displaying black pieces
@@ -65,20 +70,58 @@ def displayBlackPieces():
         Image = pygame.transform.scale(Image, (side, side))
         surface.blit(Image, getPosOnScreen(pi.currPos))
 
+    for pi in deadBlackPieces: # displaying white pieces
+        Image = pygame.image.load(gameFolder + pi.getLogo())
+        Image = pygame.transform.scale(Image, (side, side))
+        surface.blit(Image, getPosOnScreen(pi.currPos))
+
 # Function for displaying the selected piece
 def displaySrcSquare(src):
-    selBox = pygame.image.load(gameFolder + "GameImages/yellowBox.png")
+    selBox = pygame.image.load(gameFolder + "GameImages/greenBox.png")
     selBox = pygame.transform.scale(selBox, (side, side))
     surface.blit(selBox, getPosOnScreen(src))
 
+# Function for displaying the last move played
+
+def displayLastMove(init, final):
+    lastMove = pygame.image.load(gameFolder + "GameImages/yellowBox.png")
+    lastMove = pygame.transform.scale(lastMove, (side, side))
+
+    surface.blit(lastMove, getPosOnScreen((init[1], init[0])) )
+    surface.blit(lastMove, getPosOnScreen((final[1], final[0])) )
+
+# Function for displaying Check
+
+def displayCheck(turn):
+    check = pygame.image.load(gameFolder + "GameImages/redCircle.png")
+    check = pygame.transform.scale(check, (side, side))
+
+    if turn == 0:
+        kPos = kingW.currPos
+    else:
+        kPos = kingB.currPos
+
+    surface.blit(check, getPosOnScreen(kPos))
+
 # Function for displaying the possible moves
 def displayPossibleMoves(src):
-    moves = generatePossibleMoves(src);
+    if BoardState[src[0]][src[1]].color == 'W':
+        turn = 0
+    else:
+        turn = 1
+    moves = generatePossibleMoves(src, turn);
+
+    greenCircleSmall = pygame.image.load(gameFolder + "GameImages/greenCircleSmall.png")
+    greenCircleSmall = pygame.transform.scale(greenCircleSmall, (side, side))
+
+    redCircle = pygame.image.load(gameFolder + "GameImages/redCircle.png")
+    redCircle = pygame.transform.scale(redCircle, (side, side))
 
     for cord in moves:
-        posMove = pygame.image.load(gameFolder + "GameImages/greenCircleSmall.png")
-        posMove = pygame.transform.scale(posMove, (side, side))
-        surface.blit(posMove, getPosOnScreen(cord))
+        if BoardState[cord[1]][cord[0]] != null:
+            surface.blit(redCircle, getPosOnScreen(cord))
+        else:
+            surface.blit(greenCircleSmall, getPosOnScreen(cord))
 # *******************************************************************************
 
 # Game Sounds
@@ -260,7 +303,7 @@ def chooseMode():
 
     if choice == 3:
         start()
-    else:
+    elif choice != 0:
         gameMode = choice
         chooseBoardStyle()
 # ******************************************************************************
@@ -400,7 +443,10 @@ def game():
     assetsLoaded = False
     initPos = []
     finalPos = []
+    lastSt = []
+    lastEnd = []
 
+    firstMovePlayed = 0 # First move played or not
     turn = 0  # 0 -> White's Turn, 1 -> Black's Turn
     gameState = 0  # 0 -> Select Initial Position, 1 -> Select Final Position for Piece
 
@@ -413,14 +459,26 @@ def game():
             assetsLoaded = True
             wTurn.play()
 
+        if isCheckMate(turn):
+            play = False
+            if turn == 0:
+                endScreen("Black")
+            else:
+                endScreen("White")
+
         displayBoard()
+        if firstMovePlayed:
+            displayLastMove(lastSt, lastEnd)
+        if isUnderCheck(turn):
+            displayCheck(turn)
         displayWhitePieces()
         displayBlackPieces()
 
         if gameState == 1:
             displaySrcSquare((initPos[1], initPos[0]))
             displayPossibleMoves(initPos)
-
+            displayWhitePieces()
+            displayBlackPieces()
 
         for evnt in pygame.event.get():
             if (evnt.type == pygame.QUIT):
@@ -447,6 +505,10 @@ def game():
 
                         if isValidSrc(initPos, turn):
                             displaySrcSquare((initPos[1], initPos[0]))
+                            if turn == 0:
+                                displayWhitePieces()
+                            else:
+                                displayBlackPieces()
                             displayPossibleMoves(initPos)
                             gameState = 1
 
@@ -459,6 +521,9 @@ def game():
                         gameState = 0
                     else:
                         if implementMove(initPos, finalPos) == True:
+                            lastSt = initPos
+                            lastEnd = finalPos
+                            firstMovePlayed = 1
                             gameState = 0
                             turn = 1-turn
 
@@ -474,7 +539,7 @@ def game():
                             else:
                                 bTurn.play()
 
-                            pygame.time.wait(1100)
+                            pygame.time.wait(700)
                             src.play()
 
                 if (evnt.type == pygame.KEYDOWN):
@@ -484,14 +549,18 @@ def game():
                             gameState = 0
                         else:
                             if implementMove(initPos, finalPos) == True:
+                                lastSt = initPos
+                                lastEnd = finalPos
+                                firstMovePlayed = 1
                                 gameState = 0
                                 turn = 1 - turn
+
                                 if (turn == 0):
                                     wTurn.play()
                                 else:
                                     bTurn.play()
 
-                                pygame.time.wait(1100)
+                                pygame.time.wait(700)
                                 src.play()
 
 
@@ -504,7 +573,6 @@ def main():
     pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play()
     start()
-    # endScreen("White")
 
 
 main()
