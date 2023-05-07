@@ -126,6 +126,7 @@ class Null: # for empty cell
 # Pieces as Objects
 
 whitePieces = []
+deadWhitePieces = []
 
 kingW = King('W', (4, 7), (9.25, 4))
 queenW = Queen('W', (3, 7), (9.25, 3))
@@ -162,6 +163,7 @@ whitePieces.append(pawnW7)
 whitePieces.append(pawnW8)
 
 blackPieces = []
+deadBlackPieces = []
 
 kingB = King('B', (4, 0), (-2.25, 4))
 queenB = Queen('B', (3, 0), (-2.25, 3))
