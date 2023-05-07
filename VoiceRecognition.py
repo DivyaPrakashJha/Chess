@@ -45,7 +45,7 @@ def getPosition():
         ["b", "bee"], # b
         ["c", "see"], # c
         ["d", "the", "day"], # d
-        ["e"], # e
+        ["e", "yeah", "he"], # e
         ["f"], # f
         ["g", "je", "jee"], # g
         ["h","edge", "it","it's"]  # h
