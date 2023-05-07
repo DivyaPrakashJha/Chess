@@ -15,9 +15,30 @@ def isValidSrc(src, turn):
     return True
 
 
-def isUnderCheck():
+def isUnderCheck(turn):
+    if turn == 0:
+        kpos = kingW.currPos
+        for piece in blackPieces:
+            if (isValidMove((piece.currPos[1], piece.currPos[0]), (kpos[1], kpos[0]), False)):
+                return True
+    elif turn == 1:
+        kpos = kingB.currPos
+        for piece in whitePieces:
+            if (isValidMove((piece.currPos[1], piece.currPos[0]), (kpos[1], kpos[0]), False)):
+                return True
     return False
 
+def isCheckMate(turn):
+    if isUnderCheck(turn):
+        if turn == 0:
+            x = generatePossibleMoves(kingW.currPos, turn)
+            if len(x) == 0:
+                return True
+        else:
+            x = generatePossibleMoves(kingB.currPos, turn)
+            if len(x) == 0:
+                return True
+    return False
 
 def isValidMove(initPos, finalPos, isUnderCheck):
     pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
@@ -32,8 +53,7 @@ def isValidMove(initPos, finalPos, isUnderCheck):
 
     if pieceAtInitPos.getPieceValue() == 99:  # King
         if (abs(finalPos[0] - initPos[0]) > 1 or abs(finalPos[1] - initPos[1]) > 1):
-            return False;
-
+            return False
         return True
     # *******************************************************************************
 
@@ -188,7 +208,12 @@ def isValidMove(initPos, finalPos, isUnderCheck):
 
 
 def implementMove(initPos, finalPos):
-    if isValidMove(initPos, finalPos, False):
+    if BoardState[initPos[0]][initPos[1]].color == 'W':
+        turn = 0
+    else:
+        turn = 1
+
+    if isValidMove(initPos, finalPos, isUnderCheck(turn)):
         pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
         pieceAtFinalPos = BoardState[finalPos[0]][finalPos[1]]
 
@@ -198,15 +223,21 @@ def implementMove(initPos, finalPos):
         elif pieceAtFinalPos.color != pieceAtInitPos.color: # Capture
             pieceAtFinalPos.updateCurrPos(pieceAtFinalPos.ripPos)
             ( BoardState[initPos[0]][initPos[1]] , BoardState[finalPos[0]][finalPos[1]] ) = (null, BoardState[initPos[0]][initPos[1]] )
+            if pieceAtFinalPos.color == 'W':
+                deadWhitePieces.append(pieceAtFinalPos)
+                whitePieces.remove(pieceAtFinalPos)
+            if pieceAtFinalPos.color == 'B':
+                blackPieces.remove(pieceAtFinalPos)
+                deadBlackPieces.append(pieceAtFinalPos)
 
         return True
     return False
 
-def generatePossibleMoves(initPos):
+def generatePossibleMoves(initPos, turn):
     moves = []
 
     for i in range(0, 8) :
         for j in range(0, 8):
-            if isValidMove(initPos, (i, j), isUnderCheck()):
+            if isValidMove(initPos, (i, j), isUnderCheck(turn)):
                 moves.append((j, i))
     return moves
