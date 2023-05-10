@@ -15,7 +15,7 @@ from ChessEngine import *
 from VoiceRecognition import *
 # *******************************************************************************
 
-pygame.init();
+pygame.init()
 
 # Game Window and Title
 surface = pygame.display.set_mode( (board.width, board.height) );
@@ -134,6 +134,10 @@ src = pygame.mixer.Sound(gameFolder + 'GameSounds/selectpiece.wav')
 src.set_volume(0.8)
 dest = pygame.mixer.Sound(gameFolder + 'GameSounds/destination.wav')
 dest.set_volume(0.8)
+check = pygame.mixer.Sound(gameFolder + 'GameSounds/check.wav')
+check.set_volume(0.8)
+checkmate = pygame.mixer.Sound(gameFolder + 'GameSounds/checkmate.wav')
+checkmate.set_volume(0.8)
 # ******************************************************************************
 
 # Game Font
@@ -413,10 +417,6 @@ def chooseBoardStyle():
 
 def endScreen(winner):
     select = False
-    coverImage = pygame.image.load(gameFolder + "GameImages/CoverImage.jpg")
-    coverImage = pygame.transform.scale(coverImage, (board.width, board.height))
-
-    surface.blit(coverImage, (0, 0))
 
     win = bigGameFont.render(winner + " Wins!!", True, YELLOW)
     winRect = win.get_rect()
@@ -425,13 +425,22 @@ def endScreen(winner):
 
     surface.blit(win, winRect)
 
+    if winner == "White":
+        pygame.mixer.music.load(gameFolder + "GameSounds/whitewins.wav")
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play()
+    else:
+        pygame.mixer.music.load(gameFolder + "GameSounds/blackwins.wav")
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play()
+
     while not select:
         for evnt in pygame.event.get():
             if (evnt.type == pygame.QUIT):
                 select = True
             if (evnt.type == pygame.KEYDOWN):
                 if evnt.key == pygame.K_ESCAPE:
-                    play = False
+                    select = True
 
         pygame.display.update()
         clock.tick(FPS)
@@ -447,6 +456,7 @@ def game():
     lastEnd = []
 
     firstMovePlayed = 0 # First move played or not
+    underCheck = 0
     turn = 0  # 0 -> White's Turn, 1 -> Black's Turn
     gameState = 0  # 0 -> Select Initial Position, 1 -> Select Final Position for Piece
 
@@ -459,17 +469,10 @@ def game():
             assetsLoaded = True
             wTurn.play()
 
-        if isCheckMate(turn):
-            play = False
-            if turn == 0:
-                endScreen("Black")
-            else:
-                endScreen("White")
-
         displayBoard()
         if firstMovePlayed:
             displayLastMove(lastSt, lastEnd)
-        if isUnderCheck(turn):
+        if underCheck:
             displayCheck(turn)
         displayWhitePieces()
         displayBlackPieces()
@@ -494,6 +497,10 @@ def game():
 
                     if isValidSrc(initPos, turn):
                         displaySrcSquare( (initPos[1], initPos[0]) )
+                        if turn == 0:
+                            displayWhitePieces()
+                        else:
+                            displayBlackPieces()
                         displayPossibleMoves(initPos)
                         gameState = 1
 
@@ -528,12 +535,32 @@ def game():
                             turn = 1-turn
 
                             displayBoard()
+                            displayLastMove(lastSt, lastEnd)
+                            if isUnderCheck(turn):
+                                displayCheck(turn)
+                                underCheck = 1
+                            else:
+                                underCheck = 0
                             displayWhitePieces()
                             displayBlackPieces()
                             pygame.display.update()
                             clock.tick(FPS)
-                            pygame.time.wait(1100)
 
+                            if isCheckMate(turn):
+                                play = False
+                                checkmate.play()
+                                pygame.time.wait(500)
+
+                                if turn == 0:
+                                    endScreen("Black")
+                                else:
+                                    endScreen("White")
+                                break
+
+                            if underCheck:
+                                check.play()
+
+                            pygame.time.wait(500)
                             if (turn == 0):
                                 wTurn.play()
                             else:
@@ -555,6 +582,33 @@ def game():
                                 gameState = 0
                                 turn = 1 - turn
 
+                                displayBoard()
+                                displayLastMove(lastSt, lastEnd)
+                                if isUnderCheck(turn):
+                                    displayCheck(turn)
+                                    underCheck = 1
+                                else:
+                                    underCheck = 0
+                                displayWhitePieces()
+                                displayBlackPieces()
+                                pygame.display.update()
+                                clock.tick(FPS)
+
+                                if isCheckMate(turn):
+                                    play = False
+                                    checkmate.play()
+                                    pygame.time.wait(500)
+
+                                    if turn == 0:
+                                        endScreen("Black")
+                                    else:
+                                        endScreen("White")
+                                    break
+
+                                if underCheck:
+                                    check.play()
+
+                                pygame.time.wait(500)
                                 if (turn == 0):
                                     wTurn.play()
                                 else:
@@ -574,7 +628,6 @@ def main():
     pygame.mixer.music.play()
     start()
 
-
 main()
 
-pygame.quit();
+pygame.quit()
