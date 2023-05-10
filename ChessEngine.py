@@ -1,7 +1,6 @@
 from ChessBoard import BoardState
 from Pieces import *
 
-
 def isValidSrc(src, turn):
     if (src[0] > 7 or src[1] > 7 or src[0] < 0 or src[1] < 0):
         return False
@@ -28,14 +27,21 @@ def isUnderCheck(turn):
                 return True
     return False
 
+def checkEvasion(turn):
+    return True
+
 def isCheckMate(turn):
-    if isUnderCheck(turn):
+    boardcopy = BoardState
+
+    if checkEvasion(turn):
+        return False
+    elif isUnderCheck(turn):
         if turn == 0:
-            x = generatePossibleMoves(kingW.currPos, turn)
+            x = generatePossibleMoves((kingW.currPos[1], kingW.currPos[0]), turn)
             if len(x) == 0:
                 return True
         else:
-            x = generatePossibleMoves(kingB.currPos, turn)
+            x = generatePossibleMoves((kingB.currPos[1], kingB.currPos[0]), turn)
             if len(x) == 0:
                 return True
     return False
@@ -43,6 +49,7 @@ def isCheckMate(turn):
 def isValidMove(initPos, finalPos, isUnderCheck):
     pieceAtInitPos = BoardState[initPos[0]][initPos[1]]
     pieceAtFinalPos = BoardState[finalPos[0]][finalPos[1]]
+
     # *******************************************************************************
 
     if (finalPos[0] > 7 or finalPos[0] < 0 or finalPos[1] > 7 or finalPos[1] < 0):
@@ -54,6 +61,15 @@ def isValidMove(initPos, finalPos, isUnderCheck):
     if pieceAtInitPos.getPieceValue() == 99:  # King
         if (abs(finalPos[0] - initPos[0]) > 1 or abs(finalPos[1] - initPos[1]) > 1):
             return False
+        else:
+            if pieceAtInitPos.color == 'W':
+                for piece in blackPieces:
+                    if isValidMove((piece.currPos[1], piece.currPos[0]), finalPos, False):
+                        return False
+            else:
+                for piece in whitePieces:
+                    if isValidMove((piece.currPos[1], piece.currPos[0]), finalPos, False):
+                        return False
         return True
     # *******************************************************************************
 
